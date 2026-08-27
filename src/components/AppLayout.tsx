@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   LayoutDashboard,
   Mail,
@@ -11,9 +11,12 @@ import {
   X,
   Scale,
   ShieldCheck,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ChatAssistant } from "@/components/ChatAssistant";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -25,30 +28,41 @@ const NAV = [
 ] as const;
 
 export const DISCLAIMER =
-  "Responsible AI Disclaimer: This assistant uses AI-generated content. Legal documents, dates, and client emails must be reviewed by a qualified professional. AI may produce inaccurate information. Do not share confidential client information. Complies with POPIA.";
+  "Responsible AI Disclaimer: This assistant uses AI-generated content. Legal documents, dates, and client emails must be reviewed by a qualified professional. AI may produce inaccurate information.";
 
-function Brand() {
+export const POPIA_NOTICE =
+  "POPIA Notice: Do not share confidential client information with AI tools. Personal information is processed lawfully, minimally and only for the purpose of assisting your firm's administration, in line with the Protection of Personal Information Act 4 of 2013.";
+
+function Brand({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="flex items-center gap-3 px-5 py-5">
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-md">
+    <div className={cn("flex items-center gap-3 py-5", compact ? "justify-center px-2" : "px-5")}>
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground shadow-md">
         <Scale className="h-5 w-5" />
       </span>
-      <span className="leading-tight">
-        <span className="block text-base font-semibold tracking-tight text-sidebar-foreground">
-          LegalEase AI
+      {!compact && (
+        <span className="leading-tight">
+          <span className="block text-base font-semibold tracking-tight text-sidebar-foreground">
+            LegalEase AI
+          </span>
+          <span className="block text-[11px] uppercase tracking-widest text-sidebar-primary">
+            Secretary Co-Pilot
+          </span>
         </span>
-        <span className="block text-[11px] uppercase tracking-widest text-sidebar-primary">
-          Secretary Co-Pilot
-        </span>
-      </span>
+      )}
     </div>
   );
 }
 
-function NavList({ onNavigate }: { onNavigate?: () => void }) {
+function NavList({
+  onNavigate,
+  compact = false,
+}: {
+  onNavigate?: () => void;
+  compact?: boolean;
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <nav className="flex flex-col gap-1 px-3">
+    <nav className={cn("flex flex-col gap-1", compact ? "px-2" : "px-3")}>
       {NAV.map(({ to, label, icon: Icon }) => {
         const active = pathname === to;
         return (
@@ -56,8 +70,10 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
             key={to}
             to={to}
             onClick={onNavigate}
+            title={compact ? label : undefined}
             className={cn(
-              "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+              "group flex items-center gap-3 rounded-lg py-2.5 text-sm font-medium transition-all",
+              compact ? "justify-center px-2" : "px-3",
               active
                 ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm ring-1 ring-sidebar-border"
                 : "text-sidebar-foreground/75 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
@@ -69,7 +85,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
                 active ? "text-sidebar-primary" : "text-sidebar-foreground/60 group-hover:text-sidebar-primary",
               )}
             />
-            <span className="truncate">{label}</span>
+            {!compact && <span className="truncate">{label}</span>}
           </Link>
         );
       })}
@@ -87,21 +103,59 @@ export function AppLayout({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    setCollapsed(localStorage.getItem("legalease-sidebar") === "collapsed");
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  function toggleCollapsed() {
+    setCollapsed((c) => {
+      localStorage.setItem("legalease-sidebar", c ? "expanded" : "collapsed");
+      return !c;
+    });
+  }
 
   return (
     <div className="min-h-screen bg-background">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col bg-sidebar lg:flex">
-        <Brand />
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-40 hidden flex-col bg-sidebar transition-[width] duration-200 lg:flex print:hidden",
+          collapsed ? "w-20" : "w-72",
+        )}
+      >
+        <Brand compact={collapsed} />
         <div className="mx-3 mb-4 h-px bg-sidebar-border" />
-        <NavList />
-        <div className="mt-auto m-3 rounded-xl bg-sidebar-accent/60 p-4 text-xs text-sidebar-foreground/80">
-          <ShieldCheck className="mb-2 h-4 w-4 text-sidebar-primary" />
-          POPIA-aware workflows. Always verify case numbers, dates and client details.
-        </div>
+        <NavList compact={collapsed} />
+        {!collapsed && (
+          <div className="mt-auto m-3 rounded-xl bg-sidebar-accent/60 p-4 text-xs text-sidebar-foreground/80">
+            <ShieldCheck className="mb-2 h-4 w-4 text-sidebar-primary" />
+            POPIA-aware workflows. Always verify case numbers, dates and client details.
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={toggleCollapsed}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className={cn(
+            "m-3 flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+            collapsed ? "mt-auto justify-center" : "",
+          )}
+        >
+          {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+          {!collapsed && "Collapse sidebar"}
+        </button>
       </aside>
 
       {open && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-50 lg:hidden print:hidden">
           <button
             aria-label="Close navigation"
             className="absolute inset-0 bg-foreground/50"
@@ -120,16 +174,26 @@ export function AppLayout({
             </div>
             <div className="mx-3 mb-4 h-px bg-sidebar-border" />
             <NavList onNavigate={() => setOpen(false)} />
+            <div className="mt-auto m-3 rounded-xl bg-sidebar-accent/60 p-4 text-xs text-sidebar-foreground/80">
+              <ShieldCheck className="mb-2 h-4 w-4 text-sidebar-primary" />
+              POPIA-aware workflows. Always verify case numbers, dates and client details.
+            </div>
           </div>
         </div>
       )}
 
-      <div className="flex min-h-screen flex-col lg:pl-72">
-        <header className="sticky top-0 z-30 border-b border-border bg-card/85 backdrop-blur">
+      <div
+        className={cn(
+          "flex min-h-screen flex-col transition-[padding] duration-200 print:pl-0",
+          collapsed ? "lg:pl-20" : "lg:pl-72",
+        )}
+      >
+        <header className="sticky top-0 z-30 border-b border-border bg-card/85 backdrop-blur print:hidden">
           <div className="flex items-center gap-3 px-4 py-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setOpen(true)}
               aria-label="Open navigation"
+              aria-expanded={open}
               className="rounded-lg border border-border p-2 text-foreground transition-colors hover:bg-secondary lg:hidden"
             >
               <Menu className="h-5 w-5" />
@@ -142,23 +206,29 @@ export function AppLayout({
                 <p className="truncate text-xs text-muted-foreground sm:text-sm">{subtitle}</p>
               )}
             </div>
-            <span className="ml-auto hidden items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground sm:flex">
-              <span className="h-2 w-2 rounded-full bg-success" />
-              AI assistant online
-            </span>
+            <div className="ml-auto flex items-center gap-2">
+              <span className="hidden items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground sm:flex">
+                <span className="h-2 w-2 rounded-full bg-success" />
+                AI assistant online
+              </span>
+              <ThemeToggle />
+            </div>
           </div>
         </header>
 
         <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
 
         <footer className="border-t border-border bg-card px-4 py-6 sm:px-6 lg:px-8">
-          <p className="mx-auto max-w-5xl text-center text-xs leading-relaxed text-muted-foreground">
-            {DISCLAIMER}
-          </p>
+          <div className="mx-auto max-w-5xl space-y-2 text-center text-xs leading-relaxed text-muted-foreground">
+            <p>{DISCLAIMER}</p>
+            <p>{POPIA_NOTICE}</p>
+          </div>
         </footer>
       </div>
 
-      <ChatAssistant />
+      <div className="print:hidden">
+        <ChatAssistant />
+      </div>
     </div>
   );
 }
