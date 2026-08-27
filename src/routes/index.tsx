@@ -18,6 +18,7 @@ import {
   YAxis,
 } from "recharts";
 import { AppLayout } from "@/components/AppLayout";
+import { MattersTable } from "@/components/MattersTable";
 
 export const Route = createFileRoute("/")({
   head: () => ({
