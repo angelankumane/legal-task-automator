@@ -155,3 +155,33 @@
     color: var(--color-foreground);
   }
 }
+
+/* Keep the firm's navy + gold identity in dark mode */
+.dark {
+  --primary: oklch(0.62 0.14 265.5);
+  --primary-foreground: oklch(0.99 0.003 247);
+  --accent: oklch(0.78 0.12 85);
+  --accent-foreground: oklch(0.2 0.03 265);
+  --sidebar: oklch(0.19 0.035 265.7);
+  --sidebar-primary: oklch(0.8 0.12 85);
+  --sidebar-primary-foreground: oklch(0.19 0.035 265.7);
+  --sidebar-accent: oklch(0.27 0.04 262);
+  --chart-1: oklch(0.62 0.14 265.5);
+}
+
+@media print {
+  @page {
+    margin: 16mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .print-sheet {
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}
