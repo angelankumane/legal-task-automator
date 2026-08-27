@@ -155,6 +155,8 @@ function Dashboard() {
             </div>
           </div>
         </section>
+
+        <MattersTable />
       </div>
     </AppLayout>
   );
