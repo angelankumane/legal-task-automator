@@ -90,6 +90,55 @@ src/
   styles.css         # Global theme tokens, dark-mode overrides, print styles
 ```
 
+## Syncing with GitHub (Recommended)
+
+Lovable has built-in two-way GitHub sync. Once connected, every change you make in Lovable (including updates to this README) is automatically pushed to your GitHub repository, and any commits you push to GitHub are pulled back into Lovable.
+
+### Step 1 — Open the GitHub connection panel
+
+1. Open your project in the Lovable editor.
+2. Click the **Plus (+)** menu in the chat input area (bottom-left of the editor).
+3. Select **GitHub** → **Connect project**.
+
+### Step 2 — Authorize Lovable
+
+1. You will be redirected to GitHub to authorize the **Lovable GitHub App**.
+2. Review the requested permissions and click **Authorize**.
+
+### Step 3 — Choose the account or organization
+
+1. After authorization, select the GitHub **account or organization** where you want the repository created.
+2. Only one GitHub account can be connected to a Lovable workspace at a time.
+
+### Step 4 — Create the repository
+
+1. Click **Create Repository** in Lovable.
+2. Lovable will create a new repo, push the current codebase, and enable automatic sync.
+3. Wait a few moments for the initial sync to complete.
+
+### Step 5 — Verify the sync
+
+1. Open the newly created repository on GitHub.
+2. Confirm that `README.md` and the latest source files are present.
+3. From now on, any edit in Lovable will appear as a commit in GitHub automatically.
+
+### Working from GitHub or a local clone
+
+You can also develop in parallel:
+
+```bash
+# Clone the synced repository
+git clone <repository-url>
+cd legalease-ai
+
+# Make changes locally, then push
+git add .
+git commit -m "Describe your change"
+git push origin main
+```
+
+Pushes from your local machine will sync back into Lovable within seconds.
+
 ## Legal & Compliance Notes
 
 - **POPIA footer:** Displayed on every page to reinforce confidentiality and personal-information handling obligations.
@@ -98,7 +147,8 @@ src/
 
 ## Deployment
 
-This project is configured for Lovable Cloud / edge deployment. Connect your GitHub repository in the Lovable editor to enable automatic two-way sync and publish from the dashboard.
+This project is configured for Lovable Cloud / edge deployment. With GitHub sync enabled, you can publish directly from the Lovable dashboard or deploy the synced repository to any host that supports Vite/React edge apps.
+
 
 ## License
 
