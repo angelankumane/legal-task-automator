@@ -1,200 +1,109 @@
-# LegalEase Co-Pilot
+# LegalEase AI — Legal Secretary Co-Pilot
 
-Build a modern, responsive web app called "LegalEase AI - Legal Secretary Co-Pilot" that helps legal secretaries automate workplace tasks using AI. Use React + Tailwind CSS.
+A modern, responsive web application built for South African law firms. LegalEase AI streamlines daily legal-secretary tasks with a professional SaaS interface, realistic AI-assisted drafting, and a persistent POPIA-compliant disclaimer.
 
+![Tech stack](https://img.shields.io/badge/stack-TanStack%20Start%20%2B%20React%2019%20%2B%20Tailwind%20CSS-1E3A8A)
+![License](https://img.shields.io/badge/license-MIT-D4AF37)
 
+---
 
-BRANDING:
+## Features
 
-- Colors: Deep navy #1E3A8A, Gold accent #D4AF37, White, Slate-50
+- **Dashboard** — Matter register with search, status filters, deadline sorting, urgency indicators, productivity metrics, and recent activity timeline.
+- **Smart Email Generator** — Draft court-ready correspondence (Client Update, Attorney Instruction, Court Postponement Request, Fee Quotation, Document Request, Apology for Delay) with tone selection and POPIA footer.
+- **Meeting Notes Summarizer** — Convert consultation notes into structured summaries, action items, decisions, and deadlines.
+- **AI Task Planner** — Build a prioritized 08:00–17:00 court-day schedule with color-coded priority tags and a printable daily sheet.
+- **AI Research Assistant** — Quick-reference lookups for South African legal topics including PAIA, POPIA, and Rule 35 of the Uniform Rules of Court.
+- **AI Chatbot** — Floating assistant with quick-reply chips, typing indicator, and contextual guidance across all modules.
 
-- Logo: Scale of justice icon + LegalEase AI
+## Design & UX
 
-- Professional, trustworthy, law firm SaaS style
+- **Branding:** Navy primary `#1E3A8A` with gold accent `#D4AF37`.
+- **Responsive layout:** Collapsible sidebar on desktop, drawer navigation on mobile.
+- **Dark / light mode:** Theme toggle with system-preference default and `localStorage` persistence.
+- **Accessibility:** Keyboard-navigable controls, ARIA labels, focus states, and print-optimized pages.
+- **Responsible AI disclaimer:** Every page reminds users that outputs are assists and must be verified by an attorney.
 
+## Tech Stack
 
+- **Framework:** [TanStack Start](https://tanstack.com/start) (full-stack React 19)
+- **Build Tool:** Vite 7
+- **Styling:** Tailwind CSS v4 with CSS theme variables
+- **UI Primitives:** Radix UI + shadcn/ui components
+- **Charts:** Recharts
+- **Icons:** Lucide React
+- **Notifications:** Sonner
+- **Language:** TypeScript
 
-SIDEBAR NAVIGATION (collapsible on mobile with hamburger):
+## Getting Started
 
-- Dashboard
+### Prerequisites
 
-- Smart Email Generator
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- [Bun](https://bun.sh/) or npm
 
-- Meeting Notes Summarizer  
+### Install
 
-- AI Task Planner
+```bash
+# Clone the repository
+git clone <repository-url>
+cd legalease-ai
 
-- AI Research Assistant (PAIA, Legal Terms)
+# Install dependencies
+bun install
+# or
+npm install
+```
 
-- AI Chat Assistant
+### Run locally
 
-
-
-FOOTER ON EVERY PAGE:
-
-"Responsible AI Disclaimer: This assistant uses AI-generated content. Legal documents, dates, and client emails must be reviewed by a qualified professional. AI may produce inaccurate information. Do not share confidential client information. Complies with POPIA."
-
-
-
-PAGE 1 - DASHBOARD:
-
-- Greeting: "Good morning, Counsel's Secretary - Ready to bill hours?"
-
-- 4 stat cards: Emails Drafted Today (12), Meetings Summarized (5), Court Dates Scheduled (8), Time Saved (3.5 hrs)
-
-- Quick Actions: Generate Client Email, Summarize Consultation Notes, Plan Court Day
-
-- Recent Activity timeline: "Generated postponement request email", "Summarized client consultation - Smith matter"
-
-- Weekly productivity bar chart
-
-
-
-PAGE 2 - SMART EMAIL GENERATOR - FOR LEGAL WORK:
-
-Input Section (left):
-
-- Dropdown: Email Type - Client Update, Attorney Instruction, Court Postponement Request, Fee Quotation, Document Request, Apology for Delay
-
-- Textarea: "What should the email say? e.g., Inform Mr Smith his court date is 3 September, matter 123/2026"
-
-- Dropdown: Tone - Formal (Court), Professional-Friendly (Client), Persuasive (Payment Request), Urgent
-
-- Checkbox: Include POPIA confidentiality footer yes/no
-
-- Button: Generate Legal Email
-
-
-
-Output Section (right):
-
-- Generates: Subject line, Formal greeting, Body with correct legal phrasing, Closing "Kind regards, [Your Name] - Legal Secretary", POPIA disclaimer
-
-- Example output must sound like real law firm: "Re: Smith v Smith - Case No: 123/2026 - Postponement"
-
-- Buttons: Copy, Edit (make contenteditable), Clear, Save to Drafts
-
-- Add "AI Confidence: High - Please verify case numbers and dates" tag
-
-
-
-PAGE 3 - MEETING NOTES SUMMARIZER - CLIENT CONSULTATIONS:
-
-Input: Large textarea "Paste consultation / meeting notes here... e.g., Client said divorce, 2 kids, house in Soweto, wants maintenance..."
-
-Button: Summarize Consultation
-
-
-
-Output: 4 sections:
-
-- Executive Summary (2-3 lines)
-
-- Action Items with checkboxes: "Draft affidavit", "Open file Smith 123/2026", "Request marriage certificate"
-
-- Decisions Made: "Client will proceed with divorce"
-
-- Critical Deadlines with calendar icon: "File answering affidavit by 30 Aug 2026", "Court date 15 Sept 2026"
-
-- Add warning: "Verify all dates and names with attorney"
-
-
-
-PAGE 4 - AI TASK PLANNER / SCHEDULER - LAW FIRM DAY:
-
-Input Form:
-
-- Task: "Type deed / File at court / Call client"
-
-- Matter No: Text input
-
-- Priority: High (Court deadline), Medium (Client request), Low (Filing)
-
-- Duration
-
-- Due Date
-
-- Add Task button
-
-
-
-Button: Generate My Court Day (08:00-17:00)
-
-
-
-Output:
-
-- Daily time blocks: 08:00-09:00 Court filing, 09:30 Client calls, etc.
-
-- Color coded: Red High = Court deadlines, Orange Medium, Green Low
-
-- Weekly calendar showing court dates, consultations, filing deadlines
-
-- Logic: High priority + earliest due date first
-
-- Show overdue tasks in red
-
-
-
-PAGE 5 - AI RESEARCH ASSISTANT:
-
-Input: Search box "Ask about PAIA, POPIA, legal procedures..."
-
-Output: Summary, Key Points (3 insights), Recommended Next Steps, Disclaimer "This is not legal advice, consult attorney"
-
-Example: If user types "What is PAIA?", give South African PAIA explanation.
-
-
-
-PAGE 6 - AI CHATBOT:
-
-Floating chat bottom right
-
-Welcome: "Hello! I'm your LegalEase assistant. Need help drafting an email, summarizing notes, or planning your court day?"
-
-Quick chips: "Draft client follow-up", "What is Rule 35?", "Plan my day with 5 tasks"
-
-Handles prompts and shows realistic AI responses.
-
-
-
-REQUIREMENTS:
-
-- Modern dashboard UI, sidebar navigation, responsive design mobile+desktop
-
-- Structured Input & Output sections side by side on desktop, stacked on mobile
-
-- AI-generated responses (mock realistic, not lorem ipsum)
-
-- Loading animation "AI is drafting..." for 1.5 seconds before output
-
-- Copy toast notification "Copied to clipboard!"
-
-- Professional UI/UX, hover effects, rounded cards, shadows
-
-- All buttons functional, all links work
-
-- Editable AI outputs
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://legal-task-automator.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/c146b931-4a6e-4bf6-b298-790c45e74150).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
+bun dev
+# or
 npm run dev
 ```
+
+The dev server starts at `http://localhost:8080`.
+
+### Build for production
+
+```bash
+bun run build
+# or
+npm run build
+```
+
+## Project Structure
+
+```text
+src/
+  components/        # Reusable UI components (AppLayout, ChatAssistant, MattersTable, ThemeToggle)
+  lib/               # Utility modules (legal-ai engine, helpers)
+  routes/            # TanStack file-based routes
+    __root.tsx       # Root layout with Toaster and global providers
+    index.tsx        # Dashboard
+    email.tsx        # Smart Email Generator
+    notes.tsx        # Meeting Notes Summarizer
+    planner.tsx      # AI Task Planner
+    research.tsx     # AI Research Assistant
+    chat.tsx         # Full-page AI Chatbot
+  styles.css         # Global theme tokens, dark-mode overrides, print styles
+```
+
+## Legal & Compliance Notes
+
+- **POPIA footer:** Displayed on every page to reinforce confidentiality and personal-information handling obligations.
+- **Responsible AI disclaimer:** All AI-generated outputs include a reminder to verify with an attorney before use in practice.
+- **Mock AI engine:** The current implementation uses deterministic, rule-based legal templates to simulate AI responses with a realistic 1.5 s loading state. It is intended for demonstration and prototyping.
+
+## Deployment
+
+This project is configured for Lovable Cloud / edge deployment. Connect your GitHub repository in the Lovable editor to enable automatic two-way sync and publish from the dashboard.
+
+## License
+
+MIT
+
+---
+
+Built with Lovable.
